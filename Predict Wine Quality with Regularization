@@ -1,0 +1,111 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import f1_score
+from sklearn.model_selection import GridSearchCV
+from sklearn.linear_model import LogisticRegressionCV
+
+# Load the dataset
+df = pd.read_csv('wine_quality.csv')
+print(df.columns)
+y = df['quality']
+features = df.drop(columns=['quality'])
+
+# 1. Data transformation
+scaler = StandardScaler()
+X = scaler.fit_transform(features)
+
+# 2. Train-test split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=99)
+
+# 3. Fit a logistic regression classifier without regularization
+clf_no_reg = LogisticRegression(max_iter=10000)
+clf_no_reg.fit(X_train, y_train)
+
+# 4. Plot the coefficients
+predictors = features.columns
+coefficients = clf_no_reg.coef_.ravel()
+coef = pd.Series(coefficients, predictors).sort_values()
+plt.figure(figsize=(12, 8))
+coef.plot(kind='bar', title='Coefficients (no regularization)')
+plt.tight_layout()
+plt.show()
+plt.clf()
+
+# 5. Training and test performance
+y_train_pred = clf_no_reg.predict(X_train)
+y_test_pred = clf_no_reg.predict(X_test)
+train_f1 = f1_score(y_train, y_train_pred)
+test_f1 = f1_score(y_test, y_test_pred)
+print(f"Training F1 Score: {train_f1}")
+print(f"Test F1 Score: {test_f1}")
+
+# 6. Default Implementation (L2-regularized!)
+clf_default = LogisticRegression(max_iter=10000)
+clf_default.fit(X_train, y_train)
+
+# 7. Ridge Scores
+train_f1_default = f1_score(y_train, clf_default.predict(X_train))
+test_f1_default = f1_score(y_test, clf_default.predict(X_test))
+print(f"Training F1 Score (Ridge): {train_f1_default}")
+print(f"Test F1 Score (Ridge): {test_f1_default}")
+
+# 8. Coarse-grained hyperparameter tuning
+training_array = []
+test_array = []
+C_array = [0.0001, 0.001, 0.01, 0.1, 1]
+
+for C_value in C_array:
+    clf = LogisticRegression(max_iter=10000, C=C_value)
+    clf.fit(X_train, y_train)
+    training_array.append(f1_score(y_train, clf.predict(X_train)))
+    test_array.append(f1_score(y_test, clf.predict(X_test)))
+
+# 9. Plot training and test scores as a function of C
+plt.plot(C_array, training_array)
+plt.plot(C_array, test_array)
+plt.xscale('log')
+plt.show()
+plt.clf()
+
+# 10. Making a parameter grid for GridSearchCV
+param_grid = {'C': np.logspace(-4, -2, 100)}
+
+# 11. Implementing GridSearchCV with L2 penalty
+grid_clf = GridSearchCV(LogisticRegression(max_iter=10000), param_grid, scoring='f1', cv=5)
+grid_clf.fit(X_train, y_train)
+
+# 12. Optimal C value and the score corresponding to it
+best_C = grid_clf.best_params_['C']
+best_score = grid_clf.best_score_
+print(f"Optimal C: {best_C}")
+print(f"Best Score: {best_score}")
+
+# 13. Validating the "best classifier"
+clf_best_ridge = LogisticRegression(max_iter=10000, C=best_C)
+clf_best_ridge.fit(X_train, y_train)
+test_f1_best_ridge = f1_score(y_test, clf_best_ridge.predict(X_test))
+print(f"Test F1 Score (Best Ridge): {test_f1_best_ridge}")
+
+# 14. Implement L1 hyperparameter tuning with LogisticRegressionCV
+tuning_C = np.logspace(-4, 2, 100)
+clf_l1 = LogisticRegressionCV(Cs=tuning_C, cv=5, penalty='l1', solver='liblinear', scoring='f1')
+clf_l1.fit(X, y)
+
+# 15. Optimal C value and corresponding coefficients
+best_C_l1 = clf_l1.C_[0]
+coef_l1 = clf_l1.coef_.ravel()
+print(f"Optimal C (L1): {best_C_l1}")
+print(f"Coefficients (L1): {coef_l1}")
+
+# 16. Plotting the tuned L1 coefficients
+coef = pd.Series(coef_l1, predictors).sort_values()
+plt.figure(figsize=(12, 8))
+coef.plot(kind='bar', title='Coefficients for tuned L1')
+plt.tight_layout()
+plt.show()
+plt.clf()
