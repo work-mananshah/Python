@@ -1,0 +1,54 @@
+import codecademylib3_seaborn
+import matplotlib.pyplot as plt
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from svm_visualization import draw_boundary
+from players import aaron_judge, jose_altuve, david_ortiz
+
+# Function to train and visualize the SVM
+def train_and_visualize(player_data, player_name):
+    # Remove rows with NaN values in 'plate_x' and 'plate_z'
+    player_data = player_data.dropna(subset=['plate_x', 'plate_z'])
+    
+    # Create a scatter plot of the pitch locations
+    fig, ax = plt.subplots()
+    
+    # Map 'S' (strike) to 'r' (red) and 'B' (ball) to 'b' (blue)
+    colors = player_data['type'].map({'S': 'r', 'B': 'b'})
+    
+    plt.scatter(player_data['plate_x'], player_data['plate_z'], c=colors, alpha=0.25)
+    ax.set_xlim(-3, 3)
+    ax.set_ylim(-2, 6)
+
+    # Create labels (0 for ball, 1 for strike)
+    player_data['type'] = player_data['type'].map({'S': 1, 'B': 0})
+
+    # Split the data into training and validation sets
+    X = player_data[['plate_x', 'plate_z']]
+    y = player_data['type']
+    X_train, X_valid, y_train, y_valid = train_test_split(X, y, random_state=1)
+
+    # Create an SVM classifier with kernel='rbf'
+    classifier = SVC(kernel='rbf')
+
+    # Fit the classifier to the training data
+    classifier.fit(X_train, y_train)
+
+    # Draw the decision boundary
+    draw_boundary(ax, classifier)
+
+    # Calculate the accuracy of the classifier on the validation data
+    accuracy = classifier.score(X_valid, y_valid)
+    print(f"{player_name}'s SVM Accuracy: {accuracy * 100:.2f}%")
+
+    # Show the plot
+    plt.show()
+
+# Train and visualize SVM for Aaron Judge
+train_and_visualize(aaron_judge, "Aaron Judge")
+
+# Train and visualize SVM for Jose Altuve
+train_and_visualize(jose_altuve, "Jose Altuve")
+
+# Train and visualize SVM for David Ortiz
+train_and_visualize(david_ortiz, "David Ortiz")
