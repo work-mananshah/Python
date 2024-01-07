@@ -1,0 +1,39 @@
+# Create calculate_insurance_cost() function below:
+def calculate_insurance_cost(name, age, sex, bmi, num_of_children, smoker):
+    estimated_cost = 250 * age - 128 * sex + 370 * bmi + 425 * num_of_children + 24000 * smoker - 12500
+    return estimated_cost
+
+# Initial variables for Maria
+maria_age = 28
+maria_sex = 0
+maria_bmi = 26.2
+maria_num_of_children = 3
+maria_smoker = 0
+
+# Estimate Maria's insurance cost
+maria_insurance_cost = calculate_insurance_cost(name="Maria", age=maria_age, sex=maria_sex, bmi=maria_bmi, num_of_children=maria_num_of_children, smoker=maria_smoker)
+
+print("The estimated insurance cost for Maria is " + str(maria_insurance_cost) + " dollars.")
+
+# Initial variables for Omar
+omar_age = 35
+omar_sex = 1
+omar_bmi = 22.2
+omar_num_of_children = 0
+omar_smoker = 1
+
+# Estimate Omar's insurance cost
+omar_insurance_cost = calculate_insurance_cost(name="Omar", age=omar_age, sex=omar_sex, bmi=omar_bmi, num_of_children=omar_num_of_children, smoker=omar_smoker)
+
+print("The estimated insurance cost for Omar is " + str(omar_insurance_cost) + " dollars.")
+
+# Estimate your own insurance cost
+your_age = 30
+your_sex = 1
+your_bmi = 25.0
+your_num_of_children = 2
+your_smoker = 0
+
+your_insurance_cost = calculate_insurance_cost(name="Your Name", age=your_age, sex=your_sex, bmi=your_bmi, num_of_children=your_num_of_children, smoker=your_smoker)
+
+print("The estimated insurance cost for Your Name is " + str(your_insurance_cost) + " dollars.")
