@@ -1,0 +1,41 @@
+# Daily sales data
+daily_sales = """Edith Mcbride   ;,;$1.21   ;,;   white ;,; ..."""
+
+# Step 1 & 2: Replace the artifact and split the data into individual transactions
+daily_sales_replaced = daily_sales.replace(";,;", ";")
+daily_transactions = daily_sales_replaced.split(",")
+
+# Step 3: Split each transaction into a list of its data points and clean the data
+daily_transactions_split = [transaction.split(";") for transaction in daily_transactions]
+transactions_clean = [[data_point.strip() for data_point in transaction] for transaction in daily_transactions_split]
+
+# Step 4: Separate the data into lists for customers, sales, and thread_sold
+customers = [transaction[0] for transaction in transactions_clean]
+sales = [transaction[1] for transaction in transactions_clean]
+thread_sold = [transaction[2] for transaction in transactions_clean]
+
+# Step 5: Calculate total sales
+total_sales = 0
+for sale in sales:
+    total_sales += float(sale.strip("$"))
+
+# Step 6: Analyze thread sales
+thread_sold_split = []
+for thread in thread_sold:
+    if "&" in thread:
+        thread_sold_split.extend(thread.split("&"))
+    else:
+        thread_sold_split.append(thread)
+
+def color_count(color, thread_list):
+    return thread_list.count(color)
+
+colors = ['red', 'yellow', 'green', 'white', 'black', 'blue', 'purple']
+color_sales = {color: color_count(color, thread_sold_split) for color in colors}
+
+# Output
+print("Customers:", customers)
+print("Sales:", sales)
+print("Thread Sold:", thread_sold)
+print("Total Sales: $", total_sales)
+print("Thread Sales by Color:", color_sales)
