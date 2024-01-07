@@ -1,0 +1,46 @@
+import codecademylib3_seaborn
+import pandas as pd
+import numpy as np
+from weather_data import london_data
+
+# Print the first few rows of the dataset
+print(london_data.head())
+
+# Check the number of data points
+print(len(london_data))
+
+# Extract the "TemperatureC" column
+temp = london_data["TemperatureC"]
+
+# Calculate the average temperature
+average_temp = np.mean(temp)
+print("Average Temperature: {:.2f}°C".format(average_temp))
+
+# Calculate the variance of temperature
+temperature_var = np.var(temp)
+print("Temperature Variance: {:.2f}".format(temperature_var))
+
+# Calculate the standard deviation of temperature
+temperature_standard_deviation = np.std(temp)
+print("Temperature Standard Deviation: {:.2f}".format(temperature_standard_deviation))
+
+# Filter data for June and July
+june = london_data.loc[london_data["month"] == 6]["TemperatureC"]
+july = london_data.loc[london_data["month"] == 7]["TemperatureC"]
+
+# Calculate and print the mean temperature for June and July
+mean_temp_june = np.mean(june)
+mean_temp_july = np.mean(july)
+print("Mean Temperature in June: {:.2f}°C".format(mean_temp_june))
+print("Mean Temperature in July: {:.2f}°C".format(mean_temp_july))
+
+# Calculate and print the standard deviation of temperature for June and July
+std_deviation_june = np.std(june)
+std_deviation_july = np.std(july)
+print("Standard Deviation in June: {:.2f}".format(std_deviation_june))
+print("Standard Deviation in July: {:.2f}".format(std_deviation_july))
+
+# Explore mean and standard deviation for each month
+for i in range(1, 13):
+    month_data = london_data.loc[london_data["month"] == i]["TemperatureC"]
+    print("Month {}: Mean Temperature = {:.2f}°C, Standard Deviation = {:.2f}".format(i, np.mean(month_data), np.std(month_data)))
