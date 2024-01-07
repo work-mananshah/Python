@@ -1,0 +1,33 @@
+import unittest
+from surfshop import ShoppingCart, TooManyBoardsError
+
+class TestShoppingCart(unittest.TestCase):
+    def setUp(self):
+        self.cart = ShoppingCart()
+
+    def test_add_surfboards_1(self):
+        result = self.cart.add_surfboards(1)
+        self.assertEqual(result, 'Successfully added 1 surfboard to cart!')
+
+    def test_add_surfboards_2(self):
+        result = self.cart.add_surfboards(2)
+        self.assertEqual(result, 'Successfully added 2 surfboards to cart!')
+
+    @unittest.expectedFailure
+    def test_apply_locals_discount(self):
+        self.cart.apply_locals_discount()
+        self.assertTrue(self.cart.locals_discount)
+
+    @unittest.skip("Business is slow, no limit on surfboards")
+    def test_add_surfboards_5(self):
+        with self.assertRaises(TooManyBoardsError):
+            self.cart.add_surfboards(5)
+
+    @unittest.skip("Business is slow, no limit on surfboards")
+    def test_add_surfboards_parameterized(self):
+        for i in range(2, 5):
+            result = self.cart.add_surfboards(i)
+            self.assertEqual(result, f'Successfully added {i} surfboards to cart!')
+
+if __name__ == '__main__':
+    unittest.main()
