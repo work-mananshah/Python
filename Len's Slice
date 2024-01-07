@@ -1,0 +1,40 @@
+# Create a list of pizza toppings
+toppings = ["pepperoni", "pineapple", "cheese", "sausage", "olives", "anchovies", "mushrooms"]
+
+# Create a list of pizza prices
+prices = [2, 6, 1, 3, 2, 7, 2]
+
+# Count the number of $2 slices
+num_two_dollar_slices = prices.count(2)
+print(num_two_dollar_slices)
+
+# Calculate the number of different kinds of pizza
+num_pizzas = len(toppings)
+print(f"We sell {num_pizzas} different kinds of pizza!")
+
+# Create a two-dimensional list of pizza and prices
+pizza_and_prices = []
+for i in range(num_pizzas):
+    pizza_and_prices.append([prices[i], toppings[i]])
+
+# Print the two-dimensional list
+print(pizza_and_prices)
+
+# Sort pizza_and_prices by price in ascending order
+pizza_and_prices.sort()
+
+# Get the cheapest pizza
+cheapest_pizza = pizza_and_prices[0]
+
+# Get the priciest pizza and remove it from the list
+priciest_pizza = pizza_and_prices[-1]
+pizza_and_prices.pop()
+
+# Add a new topping "peppers" with price 2.5
+pizza_and_prices.append([2.5, "peppers"])
+
+# Slice the three cheapest pizzas
+three_cheapest = pizza_and_prices[:3]
+
+# Print the three cheapest pizzas
+print(three_cheapest)
