@@ -1,0 +1,50 @@
+import codecademylib3_seaborn
+from matplotlib import pyplot as plt
+import numpy as np
+import pandas as pd
+
+# Bar Graph: Featured Games
+games = ["LoL", "Dota 2", "CS:GO", "DayZ", "HOS", "Isaac", "Shows", "Hearth", "WoT", "Agar.io"]
+viewers =  [1070, 472, 302, 239, 210, 171, 170, 90, 86, 71]
+
+# Plot a bar graph
+plt.figure(figsize=(10, 6))  # Set the figure size
+plt.bar(range(len(games)), viewers, color='purple')  # Create the bar graph
+plt.title("Featured Games on Twitch")  # Add a title
+plt.xlabel("Games")  # Label for the x-axis
+plt.ylabel("Viewers")  # Label for the y-axis
+plt.xticks(range(len(games)), games, rotation=45)  # Set x-axis tick labels with rotation
+plt.legend(["Twitch"])  # Add a legend
+plt.tight_layout()  # Ensure the layout is tight
+plt.show()  # Show the graph
+
+# Pie Chart: League of Legends Viewers' Whereabouts
+labels = ["US", "DE", "CA", "N/A", "GB", "TR", "BR", "DK", "PL", "BE", "NL", "Others"]
+countries = [447, 66, 64, 49, 45, 28, 25, 20, 19, 17, 17, 279]
+colors = ['lightskyblue', 'gold', 'lightcoral', 'gainsboro', 'royalblue', 'lightpink', 'darkseagreen', 'sienna', 'khaki', 'gold', 'violet', 'yellowgreen']
+
+# Create a pie chart
+plt.figure(figsize=(8, 8))
+explode = (0.1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)  # Explode the first slice (US)
+plt.pie(countries, explode=explode, labels=labels, colors=colors, shadow=True, startangle=345, autopct='%1.0f%%', pctdistance=1.15)
+plt.title("League of Legends Viewers' Whereabouts")
+plt.legend(labels, loc="right")
+plt.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle
+plt.show()
+
+# Line Graph: Time Series Analysis
+hour = range(24)
+viewers_hour = [30, 17, 34, 29, 19, 14, 3, 2, 4, 9, 5, 48, 62, 58, 40, 51, 69, 55, 76, 81, 102, 120, 71, 63]
+
+# Plot a line graph
+plt.figure(figsize=(12, 6))
+plt.plot(hour, viewers_hour, marker='o', linestyle='-', color='orange', label='Viewers')
+plt.fill_between(hour, np.array(viewers_hour) * 1.15, np.array(viewers_hour) * 0.85, alpha=0.2, color='orange')
+plt.title("Time Series Analysis of US Viewers on Twitch")
+plt.xlabel("Hour of the Day")
+plt.ylabel("Viewers")
+plt.xticks(hour)
+plt.legend(["Viewers", "Error Margin"])
+plt.grid(True)
+plt.tight_layout()
+plt.show()
