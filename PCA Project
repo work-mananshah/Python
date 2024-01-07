@@ -1,0 +1,42 @@
+import numpy as np
+import pandas as pd
+import codecademylib3
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# ---------------
+# Task 1: Drop nan values.
+# ---------------
+
+# Read the csv data as a DataFrame
+df = pd.read_csv('./telescope_data.csv', index_col=0)
+
+# Remove null and na values
+df.dropna(inplace=True)
+
+# Print the DataFrame head
+print('Task 1:')
+print(df.head())
+
+# ---------------
+# Task 2: Extract class column.
+# ---------------
+
+# Extract the class classes
+classes = df['class']
+data_matrix = df.drop(columns='class')
+
+print('Task 2:')
+print(data_matrix)
+
+# ---------------
+# Task 3: Create a correlation matrix.
+# ---------------
+
+# Use the `.corr()` method on `data_matrix` to get the correlation matrix 
+correlation_matrix = data_matrix.corr()
+
+ax = plt.axes()
+sns.heatmap(correlation_matrix, cmap='Greens', ax=ax)
+ax.set_title('Task 3:')
+plt.show()
