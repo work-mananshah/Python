@@ -1,0 +1,46 @@
+class Patient:
+    def __init__(self, name, age, sex, bmi, num_of_children, smoker):
+        self.name = name
+        self.age = age
+        self.sex = sex
+        self.bmi = bmi
+        self.num_of_children = num_of_children
+        self.smoker = smoker
+
+    def estimated_insurance_cost(self):
+        estimated_cost = 250 * self.age - 128 * self.sex + 370 * self.bmi + 425 * self.num_of_children + 24000 * self.smoker - 12500
+        print(f"{self.name}'s estimated insurance cost is {estimated_cost} dollars.")
+        return estimated_cost
+
+    def update_age(self, new_age):
+        print(f"{self.name} is now {new_age} years old.")
+        self.age = new_age
+        self.estimated_insurance_cost()
+
+    def update_num_children(self, new_num_children):
+        self.num_of_children = new_num_children
+        if new_num_children == 1:
+            print(f"{self.name} has {new_num_children} child.")
+        else:
+            print(f"{self.name} has {new_num_children} children.")
+        self.estimated_insurance_cost()
+
+    def patient_profile(self):
+        patient_information = {
+            "Name": self.name,
+            "Age": self.age,
+            "Sex": self.sex,
+            "BMI": self.bmi,
+            "Number of Children": self.num_of_children,
+            "Smoker": self.smoker
+        }
+        return patient_information
+
+# Create an instance of the Patient class
+patient1 = Patient("John Doe", 25, 1, 22.2, 0, 0)
+
+# Test the methods
+patient1.estimated_insurance_cost()
+patient1.update_age(26)
+patient1.update_num_children(1)
+print(patient1.patient_profile())
