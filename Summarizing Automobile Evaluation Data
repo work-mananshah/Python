@@ -1,0 +1,61 @@
+import pandas as pd
+
+# Read the car evaluation dataset
+car_eval = pd.read_csv('car_eval_dataset.csv')
+print(car_eval.head())
+
+# 1. Create a table of frequencies of cars reviewed by manufacturer_country
+manufacturer_country_freq = car_eval['manufacturer_country'].value_counts()
+modal_category = manufacturer_country_freq.idxmax()  # Find the modal category
+fourth_most_frequent = manufacturer_country_freq.index[3]  # Find the 4th most frequent
+print("Table of Frequencies by Manufacturer Country:")
+print(manufacturer_country_freq)
+print("Modal Category:", modal_category)
+print("4th Most Frequent:", fourth_most_frequent)
+
+# 2. Calculate proportions for countries in manufacturer_country
+country_proportions = car_eval['manufacturer_country'].value_counts(normalize=True)
+percentage_japan = country_proportions['Japan'] * 100
+print("Proportions of Cars Manufactured by Country:")
+print(country_proportions)
+print("Percentage of Cars Manufactured in Japan:", percentage_japan)
+
+# 3. Print the possible values for the buying_cost variable
+print("Possible Values for Buying Cost:")
+print(car_eval['buying_cost'].unique())
+
+# 4. Create an ordered list of unique values for buying_cost
+buying_cost_categories = car_eval['buying_cost'].unique()
+buying_cost_categories.sort()
+print("Ordered List of Buying Cost Categories:")
+print(buying_cost_categories)
+
+# 5. Convert buying_cost to type 'category' using the ordered list
+car_eval['buying_cost'] = pd.Categorical(car_eval['buying_cost'], categories=buying_cost_categories, ordered=True)
+
+# 6. Calculate and print the median category of the buying_cost variable
+median_category = car_eval['buying_cost'].value_counts().idxmax()
+print("Median Category of Buying Cost:", median_category)
+
+
+# 7. Calculate proportions for the luggage capacity variable
+luggage_capacity_proportions = car_eval['luggage'].value_counts(normalize=True)
+print("Proportions of Luggage Capacity:")
+print(luggage_capacity_proportions)
+
+# 8. Check for missing values in the luggage capacity column
+missing_luggage_capacity = car_eval['luggage'].isnull().sum()
+print("Missing Values in Luggage Capacity:", missing_luggage_capacity)
+
+# 9. Replicate the table of proportions without normalize=True
+luggage_capacity_proportions_without_normalize = car_eval['luggage'].value_counts()
+print("Proportions of Luggage Capacity (without normalize=True):")
+print(luggage_capacity_proportions_without_normalize)
+
+# 10. Count cars with 5 or more doors
+cars_with_5_or_more_doors = (car_eval['doors'] == '5more').sum()
+print("Count of Cars with 5 or More Doors:", cars_with_5_or_more_doors)
+
+# 11. Calculate the proportion of cars with 5+ doors
+proportion_5_or_more_doors = cars_with_5_or_more_doors / len(car_eval)
+print("Proportion of Cars with 5+ Doors:", proportion_5_or_more_doors)
