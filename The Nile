@@ -1,0 +1,67 @@
+from nile import get_distance, format_price, SHIPPING_PRICES
+from test import test_function
+
+# Define calculate_shipping_cost() here:
+def calculate_shipping_cost(from_coords, to_coords, shipping_type='Overnight'):
+    # Unpack the tuples into separate variables
+    from_lat, from_long = from_coords
+    to_lat, to_long = to_coords
+    
+    # Calculate the distance using get_distance()
+    distance = get_distance(from_lat, from_long, to_lat, to_long)
+    
+    # Get the shipping rate from SHIPPING_PRICES
+    shipping_rate = SHIPPING_PRICES[shipping_type]
+    
+    # Calculate the price by multiplying distance by shipping_rate
+    price = distance * shipping_rate
+    
+    # Return the formatted price
+    return format_price(price)
+
+# Test the function by calling
+test_function(calculate_shipping_cost)
+
+# Define calculate_driver_cost() here:
+def calculate_driver_cost(distance, *drivers):
+    # Initialize variables for cheapest driver and price
+    cheapest_driver = None
+    cheapest_driver_price = None
+    
+    # Iterate over each driver
+    for driver in drivers:
+        # Calculate driver_time
+        driver_time = distance / driver.speed
+        
+        # Calculate price_for_driver
+        price_for_driver = driver.salary * driver_time
+        
+        # Check if this is the first driver or if this driver is cheaper
+        if cheapest_driver is None or price_for_driver < cheapest_driver_price:
+            cheapest_driver = driver
+            cheapest_driver_price = price_for_driver
+    
+    # Return the cheapest driver's price and driver object
+    return cheapest_driver_price, cheapest_driver
+
+# Test the function by calling
+test_function(calculate_driver_cost)
+
+# Define calculate_money_made() here:
+def calculate_money_made(**trips):
+    # Initialize total_money_made counter
+    total_money_made = 0
+    
+    # Iterate through trip_id and trip information
+    for trip_id, trip in trips.items():
+        # Calculate trip revenue
+        trip_revenue = trip.cost - trip.driver.cost
+        
+        # Add trip revenue to total_money_made
+        total_money_made += trip_revenue
+    
+    # Return the total money made
+    return total_money_made
+
+# Test the function by calling
+test_function(calculate_money_made)
