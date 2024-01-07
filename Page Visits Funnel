@@ -1,0 +1,52 @@
+import codecademylib3
+import pandas as pd
+
+# Load the data into DataFrames
+visits = pd.read_csv('visits.csv', parse_dates=[1])
+cart = pd.read_csv('cart.csv', parse_dates=[1])
+checkout = pd.read_csv('checkout.csv', parse_dates=[1])
+purchase = pd.read_csv('purchase.csv', parse_dates=[1])
+
+# Step 2: Combine visits and cart using a left merge
+visits_and_cart = pd.merge(visits, cart, how='left')
+
+# Step 3: How long is the merged DataFrame?
+print(len(visits_and_cart))
+
+# Step 4: How many null timestamps for cart_time?
+null_cart_time = len(visits_and_cart[visits_and_cart['cart_time'].isnull()])
+print("Number of null cart_time timestamps:", null_cart_time)
+print("Null rows mean that users visited but did not add items to the cart.")
+
+# Step 5: Percentage of users not placing an item in their cart
+percent_no_cart = (null_cart_time / len(visits)) * 100
+print("Percentage of users who didn't add an item to the cart:", percent_no_cart, "%")
+
+# Step 6: Left merge for cart and checkout and count null values
+cart_and_checkout = pd.merge(cart, checkout, how='left')
+null_checkout_time = len(cart_and_checkout[cart_and_checkout['checkout_time'].isnull()])
+percent_no_checkout = (null_checkout_time / len(cart)) * 100
+print("Percentage of users who didn't proceed to checkout after adding items to the cart:", percent_no_checkout, "%")
+
+# Step 7: Merge all four steps of the funnel
+all_data = visits.merge(cart, how='left').merge(checkout, how='left').merge(purchase, how='left')
+
+# Step 8: Percentage of users who didn't purchase after proceeding to checkout
+null_purchase_time = len(all_data[all_data['purchase_time'].isnull()])
+percent_no_purchase = (null_purchase_time / len(checkout)) * 100
+print("Percentage of users who didn't purchase after proceeding to checkout:", percent_no_purchase, "%")
+
+# Step 9: Identify the weakest step of the funnel
+weakest_step = 'proceeding to checkout'
+print("The weakest step of the funnel is", weakest_step)
+print("Cool T-Shirts Inc. may improve the checkout process to encourage more users to make a purchase.")
+
+# Step 10: Calculate average time from initial visit to final purchase
+all_data['time_to_purchase'] = all_data['purchase_time'] - all_data['visit_time']
+
+# Step 11: Examine the new column
+print(all_data['time_to_purchase'])
+
+# Step 12: Calculate the average time to purchase
+average_time_to_purchase = all_data['time_to_purchase'].mean()
+print("Average time to purchase:", average_time_to_purchase)
