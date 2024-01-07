@@ -1,0 +1,53 @@
+# List of names and insurance costs
+names = ["Mohamed", "Sara", "Xia", "Paul", "Valentina", "Jide", "Aaron", "Emily", "Nikita", "Paul"]
+insurance_costs = [13262.0, 4816.0, 6839.0, 5054.0, 14724.0, 5360.0, 7640.0, 6072.0, 2750.0, 12064.0]
+
+# Add a new individual and insurance cost
+names.append("Priscilla")
+insurance_costs.append(8320.0)
+
+# Combine names and insurance_costs into a list of medical records
+medical_records = list(zip(insurance_costs, names))
+
+# Print the medical records
+print("Medical Records:")
+print(medical_records)
+
+# Calculate the number of medical records
+num_medical_records = len(medical_records)
+
+# Print the number of medical records
+print(f"There are {num_medical_records} medical records.")
+
+# Select the first medical record
+first_medical_record = medical_records[0]
+
+# Print the first medical record
+print(f"Here is the first medical record: {first_medical_record}")
+
+# Sort medical records by insurance cost (ascending order)
+sorted_medical_records = sorted(medical_records)
+
+# Print the sorted medical records
+print("Medical Records Sorted by Insurance Cost:")
+print(sorted_medical_records)
+
+# Slice and store the three cheapest insurance costs
+cheapest_three = sorted_medical_records[:3]
+
+# Print the three cheapest insurance costs
+print("The Three Cheapest Insurance Costs:")
+print(cheapest_three)
+
+# Slice and store the three most expensive insurance costs
+priciest_three = sorted_medical_records[-3:]
+
+# Print the three most expensive insurance costs
+print("The Three Most Expensive Insurance Costs:")
+print(priciest_three)
+
+# Count occurrences of "Paul" in the names list
+occurrences_paul = names.count("Paul")
+
+# Print the number of occurrences of "Paul"
+print(f"There are {occurrences_paul} individuals with the name Paul in our medical records.")
