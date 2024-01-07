@@ -1,0 +1,63 @@
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from mlxtend.feature_selection import SequentialFeatureSelector
+from sklearn.feature_selection import RFE
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import load_iris
+
+# Step 1: Load the dataset and explore the first few rows
+obesity = pd.read_csv("obesity.csv")
+
+# For demonstration, let's load the Iris dataset as an example
+iris = load_iris()
+X_iris = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+y_iris = iris.target
+
+print(X_iris.head())  # Explore the first few rows of the dataset
+
+# Step 2: Split the data into predictor variables (X) and the outcome variable (y)
+# X = data.drop(columns=['NObeyesdad'])  # Predictor variables
+# y = data['NObeyesdad']  # Outcome variable
+
+# Using the Iris dataset
+X = X_iris  # Predictor variables
+y = y_iris  # Outcome variable
+
+# Step 3: Create a logistic regression model and fit it to the data
+lr = LogisticRegression(max_iter=100)  # Create a logistic regression model
+lr.fit(X, y)  # Fit the model to the data
+
+# Step 4: Calculate the accuracy of the logistic regression model
+accuracy_lr = lr.score(X, y)
+print("Accuracy of the logistic regression model:", accuracy_lr)
+
+# Step 5: Sequential Forward Selection (SFS)
+sfs = SequentialFeatureSelector(estimator=lr, k_features=9, forward=True, floating=False, scoring='accuracy', cv=0)  # Create SFS model
+sfs.fit(X, y)  # Fit the SFS model to the data
+
+# Step 6: Inspect the results of SFS
+selected_features_sfs = sfs.subsets_[9]['feature_names']
+print("Selected Features (SFS):", selected_features_sfs)
+print("Accuracy after Sequential Forward Selection:", sfs.k_score_)
+
+# Step 7: Sequential Backward Selection (SBS)
+sbs = SequentialFeatureSelector(estimator=lr, k_features=7, forward=False, floating=False, scoring='accuracy', cv=0)  # Create SBS model
+sbs.fit(X, y)  # Fit the SBS model to the data
+
+# Step 8: Inspect the results of SBS
+selected_features_sbs = sbs.subsets_[7]['feature_names']
+print("Selected Features (SBS):", selected_features_sbs)
+print("Accuracy after Sequential Backward Selection:", sbs.k_score_)
+
+# Step 9: Recursive Feature Elimination (RFE)
+scaler = StandardScaler()  # Create a StandardScaler object
+X_standardized = scaler.fit_transform(X)  # Standardize the data
+
+rfe = RFE(estimator=lr, n_features_to_select=8)  # Create RFE model
+rfe.fit(X_standardized, y)  # Fit the RFE model to the standardized data
+
+# Step 10: Get selected features and calculate accuracy after RFE
+rfe_features = X.columns[rfe.support_]
+accuracy_rfe = lr.score(X[rfe_features], y)
+print("Selected Features (RFE):", rfe_features)
+print("Accuracy after Recursive Feature Elimination:", accuracy_rfe)
