@@ -1,0 +1,55 @@
+import codecademylib3_seaborn
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the dataset
+data = pd.read_csv("country_data.csv")
+
+# Print the first 5 rows of the dataset to inspect its structure
+print(data.head())
+
+# Extract the "Life Expectancy" column and store it in a variable named life_expectancy
+life_expectancy = data["Life Expectancy"]
+
+# Calculate and print the quartiles of life_expectancy
+life_expectancy_quartiles = np.quantile(life_expectancy, [0.25, 0.5, 0.75])
+print("Life Expectancy Quartiles:")
+print(life_expectancy_quartiles)
+
+# Plot a histogram of life_expectancy
+plt.hist(life_expectancy)
+plt.xlabel("Life Expectancy")
+plt.ylabel("Frequency")
+plt.title("Distribution of Life Expectancy")
+plt.show()
+
+# Extract the "GDP" column and store it in a variable named gdp
+gdp = data["GDP"]
+
+# Calculate the median GDP
+median_gdp = np.median(gdp)
+print("Median GDP:", median_gdp)
+
+# Split the data into low GDP and high GDP countries based on the median GDP
+low_gdp = data[data['GDP'] <= median_gdp]
+high_gdp = data[data['GDP'] > median_gdp]
+
+# Calculate and print the quartiles of life expectancy for low GDP countries
+low_gdp_quartiles = np.quantile(low_gdp["Life Expectancy"], [0.25, 0.5, 0.75])
+print("Low GDP Life Expectancy Quartiles:")
+print(low_gdp_quartiles)
+
+# Calculate and print the quartiles of life expectancy for high GDP countries
+high_gdp_quartiles = np.quantile(high_gdp["Life Expectancy"], [0.25, 0.5, 0.75])
+print("High GDP Life Expectancy Quartiles:")
+print(high_gdp_quartiles)
+
+# Plot histograms of life expectancy for low GDP and high GDP countries
+plt.hist(high_gdp["Life Expectancy"], alpha=0.5, label="High GDP")
+plt.hist(low_gdp["Life Expectancy"], alpha=0.5, label="Low GDP")
+plt.xlabel("Life Expectancy")
+plt.ylabel("Frequency")
+plt.legend()
+plt.title("Distribution of Life Expectancy by GDP")
+plt.show()
