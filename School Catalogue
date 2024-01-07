@@ -1,0 +1,56 @@
+class School:
+    def __init__(self, name, level, numberOfStudents):
+        self.name = name
+        self.level = level
+        self.numberOfStudents = numberOfStudents
+
+    def get_name(self):
+        return self.name
+
+    def get_level(self):
+        return self.level
+
+    def get_number_of_students(self):
+        return self.numberOfStudents
+
+    def set_number_of_students(self, number):
+        self.numberOfStudents = number
+
+    def __repr__(self):
+        return f"A {self.level} school named {self.name} with {self.numberOfStudents} students"
+
+
+class PrimarySchool(School):
+    def __init__(self, name, numberOfStudents, pickupPolicy):
+        super().__init__(name, "primary", numberOfStudents)
+        self.pickupPolicy = pickupPolicy
+
+    def get_pickup_policy(self):
+        return self.pickupPolicy
+
+    def __repr__(self):
+        return super().__repr__() + f" Pickup Policy: {self.pickupPolicy}"
+
+
+class HighSchool(School):
+    def __init__(self, name, numberOfStudents, sportsTeams):
+        super().__init__(name, "high", numberOfStudents)
+        self.sportsTeams = sportsTeams
+
+    def get_sports_teams(self):
+        return self.sportsTeams
+
+    def __repr__(self):
+        teams = ", ".join(self.sportsTeams)
+        return super().__repr__() + f" Sports Teams: {teams}"
+
+
+# Test the classes
+school1 = School("Generic School", "middle", 500)
+print(school1)
+
+primary_school = PrimarySchool("Primary School", 300, "Pickup after 3pm")
+print(primary_school)
+
+high_school = HighSchool("High School", 1000, ["Basketball", "Soccer", "Chess"])
+print(high_school)
