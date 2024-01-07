@@ -1,0 +1,73 @@
+import codecademylib3_seaborn
+from sklearn.linear_model import Perceptron
+import matplotlib.pyplot as plt
+import numpy as np
+from itertools import product
+
+# Create data representing an AND gate
+data = [[0, 0], [0, 1], [1, 0], [1, 1]]
+
+# Create labels for AND gate data
+labels = [0, 0, 0, 1]
+
+# Plot the AND gate data
+plt.scatter([point[0] for point in data], [point[1] for point in data], c=labels)
+plt.title("AND Gate")
+plt.xlabel("Input 1")
+plt.ylabel("Input 2")
+plt.show()
+
+# Create a Perceptron for AND gate
+classifier = Perceptron(max_iter=40, random_state=22)
+
+# Train the Perceptron on AND gate data
+classifier.fit(data, labels)
+
+# Check accuracy for AND gate
+accuracy_and = classifier.score(data, labels)
+print("Accuracy for AND gate:", accuracy_and)
+
+# Change labels to represent XOR gate
+labels_xor = [0, 1, 1, 0]
+
+# Check accuracy for XOR gate
+accuracy_xor = classifier.score(data, labels_xor)
+print("Accuracy for XOR gate:", accuracy_xor)
+
+# Change data and labels to represent OR gate
+data_or = [[0, 0], [0, 1], [1, 0], [1, 1]]
+labels_or = [0, 1, 1, 1]
+
+# Create a Perceptron for OR gate
+classifier_or = Perceptron(max_iter=40, random_state=22)
+
+# Train the Perceptron on OR gate data
+classifier_or.fit(data_or, labels_or)
+
+# Check accuracy for OR gate
+accuracy_or = classifier_or.score(data_or, labels_or)
+print("Accuracy for OR gate:", accuracy_or)
+
+# Reset labels to represent AND gate
+labels_and = [0, 0, 0, 1]
+
+# Use classifier's decision_function to get distances
+distances = classifier.decision_function(data)
+
+# Create x and y values for the heatmap
+x_values = np.linspace(0, 1, 100)
+y_values = np.linspace(0, 1, 100)
+
+# Create a grid of points
+point_grid = list(product(x_values, y_values))
+
+# Calculate distances for the grid
+distances_matrix = np.reshape(classifier.decision_function(point_grid), (100, 100))
+
+# Create a heatmap to visualize the decision boundary for AND gate
+plt.pcolormesh(x_values, y_values, distances_matrix)
+plt.colorbar()
+plt.title("Decision Boundary for AND Gate")
+plt.xlabel("Input 1")
+plt.ylabel("Input 2")
+plt.show()
