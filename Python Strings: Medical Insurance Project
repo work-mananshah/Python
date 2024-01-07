@@ -1,0 +1,56 @@
+# Medical data string
+medical_data = """Marina Allison   ,27   ,   31.1 , 
+#7010.0   ;Markus Valdez   ,   30, 
+22.4,   #4050.0 ;Connie Ballard ,43 
+,   25.3 , #12060.0 ;Darnell Weber   
+,   35   , 20.6   , #7500.0;
+Sylvie Charles   ,22, 22.1 
+,#3022.0   ;   Vinay Padilla,24,   
+26.9 ,#4620.0 ;Meredith Santiago, 51   , 
+29.3 ,#16330.0;   Andre Mccarty, 
+19,22.7 , #2900.0 ; 
+Lorena Hodson ,65, 33.1 , #19370.0; 
+Isaac Vu ,34, 24.8,   #7045.0"""
+
+# Replace '#' with '$' to represent insurance costs in US dollars
+updated_medical_data = medical_data.replace('#', '$')
+
+# Count the number of medical records
+num_records = 0
+
+# Iterate through the updated medical data and count records
+for char in updated_medical_data:
+    if char == '$':
+        num_records += 1
+
+# Print the number of medical records
+print(f"There are {num_records} medical records in the data.")
+
+# Split the medical data into a list of records
+medical_data_split = updated_medical_data.split(';')
+
+# Create an empty list to store cleaned medical records
+medical_records_clean = []
+
+# Iterate through each record and clean up the data
+for record in medical_data_split:
+    record_clean = []
+    items = record.split(',')
+    for item in items:
+        record_clean.append(item.strip())
+    medical_records_clean.append(record_clean)
+
+# Print the cleaned medical records
+for record in medical_records_clean:
+    print(record)
+
+# Calculate the average BMI
+total_bmi = 0.0
+
+for record in medical_records_clean:
+    total_bmi += float(record[2])
+
+average_bmi = total_bmi / len(medical_records_clean)
+
+# Print the average BMI
+print(f"Average BMI: {average_bmi}")
