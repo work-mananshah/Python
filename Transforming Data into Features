@@ -1,0 +1,75 @@
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+
+# Import data
+reviews = pd.read_csv("reviews.csv")
+
+# Print column names
+print(reviews.columns)
+
+# Check data types
+print(reviews.info())
+
+# Explore 'recommended' feature
+print(reviews['recommended'].value_counts())
+
+# Create binary dictionary for 'recommended' feature
+binary_dict = {True: 1, False: 0}
+
+# Transform 'recommended' column
+reviews['recommended'] = reviews['recommended'].map(binary_dict)
+
+# Confirm transformation
+print(reviews['recommended'].value_counts())
+
+# Explore 'rating' feature
+print(reviews['rating'].value_counts())
+
+# Create dictionary for 'rating' feature
+rating_dict = {
+    'Loved it': 5,
+    'Liked it': 4,
+    'Was okay': 3,
+    'Not great': 2,
+    'Hated it': 1
+}
+
+# Transform 'rating' column
+reviews['rating'] = reviews['rating'].map(rating_dict)
+
+# Confirm transformation
+print(reviews['rating'].value_counts())
+
+# Explore 'department_name' feature
+print(reviews['department_name'].value_counts())
+
+# One-hot encode 'department_name' feature
+one_hot = pd.get_dummies(reviews['department_name'])
+
+# Join one-hot encoded columns back to the original data frame
+reviews = pd.concat([reviews, one_hot], axis=1)
+
+# Print column names after one-hot encoding
+print(reviews.columns)
+
+# Transform 'review_date' feature to date-time
+reviews['review_date'] = pd.to_datetime(reviews['review_date'])
+
+# Confirm transformation
+print(reviews['review_date'].dtype)
+
+# Get numerical columns for scaling
+numerical_columns = ['recommended', 'rating'] + list(one_hot.columns)
+
+# Reset index to 'clothing_id'
+reviews.set_index('clothing_id', inplace=True)
+
+# Instantiate StandardScaler
+scaler = StandardScaler()
+
+# Fit and transform the data
+reviews[numerical_columns] = scaler.fit_transform(reviews[numerical_columns])
+
+# Print the scaled data
+print(reviews.head())
